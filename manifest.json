@@ -1,0 +1,37 @@
+{
+  "name": "SlayRec",
+  "short_name": "SlayRec",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffb347",
+  "theme_color": "#b780ff",
+  "icons": [
+    // Android
+    {
+      "src": "android/android-launchericon-192-192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "android/android-launchericon-512-512.png",
+      "sizes": "512x512"
+    },
+
+    // iOS principaux
+    {
+      "src": "ios/120.png",
+      "sizes": "120x120"
+    },
+    {
+      "src": "ios/152.png",
+      "sizes": "152x152"
+    },
+    {
+      "src": "ios/180.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "ios/512.png",
+      "sizes": "512x512"
+    }
+  ]
+}
