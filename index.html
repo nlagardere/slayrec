@@ -4,32 +4,23 @@
 <meta charset="UTF-8">
 <title>SlayRec</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#bb86fc">
+
 <style>
-* { box-sizing: border-box; }
-body { margin:0; padding:0; font-family:'Roboto','Segoe UI',system-ui,sans-serif; min-height:100vh; overflow-x:hidden; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color:#e4e4e7; }
+* { box-sizing:border-box; margin:0; padding:0; font-family:'Roboto','Segoe UI',system-ui,sans-serif; }
+body { min-height:100vh; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color:#e4e4e7; overflow-x:hidden; }
 .hidden { display:none; }
 
-.container {
-  max-width:480px;
-  margin:0 auto;
-  padding:16px;
-  padding-bottom:100px;
-}
+.container { max-width:480px; margin:0 auto; padding:16px; padding-bottom:100px; }
+h2 { text-align:center; font-size:24px; font-weight:500; margin-bottom:24px; letter-spacing:0.5px; }
 
-h2 { font-size:24px; font-weight:500; margin:0 0 24px; text-align:center; letter-spacing:0.5px; }
-
-.card {
-  background: rgba(255,255,255,0.05);
-  backdrop-filter: blur(10px);
-  border-radius:28px;
-  padding:16px;
-  margin-bottom:16px;
-  border:1px solid rgba(255,255,255,0.1);
-  box-shadow:0 4px 16px rgba(0,0,0,0.3);
-}
+.card { background: rgba(255,255,255,0.05); backdrop-filter: blur(10px); border-radius:28px; padding:16px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.1); box-shadow:0 4px 16px rgba(0,0,0,0.3); }
 
 #ref { width:100%; display:block; border-radius:20px; background:#000; }
-#camPreview { position:fixed; bottom:24px; right:24px; width:100px; height:133px; border-radius:20px; border:3px solid rgba(255,255,255,0.9); box-shadow:0 8px 24px rgba(0,0,0,0.5); z-index:10; object-fit:cover; }
+
+#camPreview { position:fixed; bottom:24px; right:24px; width:100px; height:133px; border-radius:20px; border:3px solid rgba(255,255,255,0.9); box-shadow:0 8px 24px rgba(0,0,0,0.5); object-fit:cover; z-index:10; }
+
 #mix { display:none; }
 
 .file-input-wrapper { position:relative; width:100%; margin-bottom:16px; }
@@ -37,7 +28,7 @@ h2 { font-size:24px; font-weight:500; margin:0 0 24px; text-align:center; letter
 .file-input-label {
   display:flex; align-items:center; justify-content:center; gap:8px;
   width:100%; padding:16px 24px;
-  background: rgba(187, 134, 252, 0.15);
+  background: rgba(187,134,252,0.15);
   border:2px dashed rgba(187,134,252,0.5);
   border-radius:20px; color:#bb86fc; font-size:15px; font-weight:500;
   cursor:pointer; transition:all 0.3s ease;
@@ -48,11 +39,8 @@ h2 { font-size:24px; font-weight:500; margin:0 0 24px; text-align:center; letter
 .button-group { display:flex; gap:12px; margin-top:16px; }
 button { flex:1; padding:16px 24px; border:none; border-radius:100px; font-size:15px; font-weight:500; cursor:pointer; transition:all 0.3s ease; box-shadow:0 2px 8px rgba(0,0,0,0.2); text-transform:uppercase; letter-spacing:0.5px; }
 #start { background: linear-gradient(135deg,#bb86fc 0%,#9d6dd9 100%); color:#000; }
-#start:not(:disabled):active { transform:scale(0.97); box-shadow:0 1px 4px rgba(0,0,0,0.3); }
-#start:disabled { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.3); cursor:not-allowed; }
 #stop { background: linear-gradient(135deg,#cf6679 0%,#b94f61 100%); color:#fff; }
-#stop:not(:disabled):active { transform:scale(0.97); box-shadow:0 1px 4px rgba(0,0,0,0.3); }
-#stop:disabled { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.3); cursor:not-allowed; }
+button:disabled { background:rgba(255,255,255,0.1); color:rgba(255,255,255,0.3); cursor:not-allowed; }
 
 #result { margin-top:24px; }
 #result video { width:100%; border-radius:20px; margin-bottom:16px; background:#000; }
@@ -65,9 +53,7 @@ button { flex:1; padding:16px 24px; border:none; border-radius:100px; font-size:
 #result a:active { transform:scale(0.97); }
 
 .no-pwa {
-  display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh;
-  text-align:center; padding:16px; color:#fff; background:#16213e;
-}
+  display:flex; flex-direction:column; justify-content:center; align-items:center; height:100vh; text-align:center; padding:16px; color:#fff; background:#16213e; }
 .no-pwa h1 { font-size:24px; margin-bottom:16px; }
 .no-pwa p { font-size:16px; line-height:1.5; }
 
@@ -80,7 +66,7 @@ button { flex:1; padding:16px 24px; border:none; border-radius:100px; font-size:
 </head>
 <body>
 
-<!-- Page si pas en PWA -->
+<!-- Bannière PWA -->
 <div class="no-pwa hidden" id="noPwa">
   <h1>📲 Hey !</h1>
   <p>SlayRec fonctionne mieux si tu l'ajoutes à ton écran d’accueil.<br>
@@ -115,20 +101,24 @@ button { flex:1; padding:16px 24px; border:none; border-radius:100px; font-size:
 const noPwa = document.getElementById("noPwa");
 const app = document.getElementById("app");
 
-// Détection PWA
+// -------------------------
+// Gestion PWA
+// -------------------------
 function isPWA() {
   return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
 
 if (isPWA()) {
-  app.classList.remove("hidden");
+  noPwa.style.display = "none";
+  app.style.display = "block";
 } else {
-  noPwa.classList.remove("hidden");
+  noPwa.style.display = "flex";
+  app.style.display = "none";
 }
 
-// ----------------------------------
-// SlayRec code
-// ----------------------------------
+// -------------------------
+// SlayRec
+// -------------------------
 const cam = document.getElementById("camPreview");
 const ref = document.getElementById("ref");
 const canvas = document.getElementById("mix");
@@ -146,7 +136,8 @@ let drawing = false;
 
 // Accès caméra
 navigator.mediaDevices.getUserMedia({ video:true, audio:false })
-.then(stream => { cam.srcObject = stream; });
+.then(stream => { cam.srcObject = stream; })
+.catch(err => console.error("Erreur caméra:", err));
 
 // Choix vidéo modèle
 videoFile.onchange = e => {
@@ -161,21 +152,24 @@ videoFile.onchange = e => {
 
 // Dessin caméra + vidéo sur canvas
 function drawCam() {
-  if (!drawing || !canvas.width || !canvas.height) return;
+  if (!drawing) return;
+  canvas.width = ref.videoWidth || 720;
+  canvas.height = ref.videoHeight || 1280;
   ctx.clearRect(0,0,canvas.width,canvas.height);
+
   // vidéo trend en arrière-plan
   ctx.drawImage(ref, 0,0,canvas.width,canvas.height);
+
   // caméra overlay
   const camWidth = canvas.width/4;
   const camHeight = canvas.height/4;
   ctx.drawImage(cam, canvas.width-camWidth-20, canvas.height-camHeight-20, camWidth, camHeight);
+
   requestAnimationFrame(drawCam);
 }
 
 // Enregistrement
 startBtn.onclick = async () => {
-  canvas.width = cam.videoWidth || 720;
-  canvas.height = cam.videoHeight || 1280;
   drawing = true;
   drawCam();
 
@@ -221,5 +215,7 @@ stopBtn.onclick = () => {
   drawing = false;
 };
 </script>
+<script id="kwAcceptAll" data-show-once="false" src="https://cdn.jsdelivr.net/gh/accept-all/cdn/banner-2024.js" defer></script>
+  
 </body>
 </html>
