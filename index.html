@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>SlayRec</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e4e4e7;
+  font-family: 'Roboto', 'Segoe UI', system-ui, sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+.container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 16px;
+  padding-bottom: 100px;
+}
+h2 {
+  font-size: 24px;
+  font-weight: 500;
+  margin: 0 0 24px 0;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 28px;
+  padding: 16px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+#ref {
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  background: #000;
+}
+#camPreview {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 100px;
+  height: 133px;
+  border-radius: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  object-fit: cover;
+}
+#mix {
+  display: none;
+}
+.file-input-wrapper {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+#videoFile {
+  display: none;
+}
+.file-input-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 16px 24px;
+  background: rgba(187, 134, 252, 0.15);
+  border: 2px dashed rgba(187, 134, 252, 0.5);
+  border-radius: 20px;
+  color: #bb86fc;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.file-input-label:active {
+  transform: scale(0.98);
+}
+.file-input-label.has-file {
+  background: rgba(187, 134, 252, 0.25);
+  border-color: #bb86fc;
+}
+.button-group {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+button {
+  flex: 1;
+  padding: 16px 24px;
+  border: none;
+  border-radius: 100px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+#start {
+  background: linear-gradient(135deg, #bb86fc 0%, #9d6dd9 100%);
+  color: #000;
+}
+#start:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+#start:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+#stop {
+  background: linear-gradient(135deg, #cf6679 0%, #b94f61 100%);
+  color: #fff;
+}
+#stop:not(:disabled):active {
+  transform: scale(0.97);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+#stop:disabled {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.3);
+  cursor: not-allowed;
+}
+#result {
+  margin-top: 24px;
+}
+#result video {
+  width: 100%;
+  border-radius: 20px;
+  margin-bottom: 16px;
+  background: #000;
+}
+#result a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px 28px;
+  background: linear-gradient(135deg, #03dac6 0%, #018786 100%);
+  color: #000;
+  text-decoration: none;
+  border-radius: 100px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(3, 218, 198, 0.3);
+}
+#result a:active {
+  transform: scale(0.97);
+}
+@media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  #camPreview {
+    width: 80px;
+    height: 107px;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <h2>🎬 SlayRec</h2>
+  
+  <div class="card">
+    <video id="ref" playsinline muted></video>
+  </div>
+  
+  <div class="file-input-wrapper">
+    <input type="file" id="videoFile" accept="video/*">
+    <label for="videoFile" class="file-input-label">
+      📹 Choisir la vidéo de la trend
+    </label>
+  </div>
+  
+  <div class="button-group">
+    <button id="start" disabled>● Enregistrer</button>
+    <button id="stop" disabled>■ Stop</button>
+  </div>
+  
+  <div id="result"></div>
+</div>
+
+<video id="camPreview" autoplay muted playsinline></video>
+<canvas id="mix"></canvas>
+
+<script>
+const cam = document.getElementById("camPreview");
+const ref = document.getElementById("ref");
+const canvas = document.getElementById("mix");
+const ctx = canvas.getContext("2d");
+
+const videoFile = document.getElementById("videoFile");
+const fileLabel = document.querySelector(".file-input-label");
+const startBtn = document.getElementById("start");
+const stopBtn = document.getElementById("stop");
+const result = document.getElementById("result");
+
+let recorder;
+let chunks = [];
+
+// Accès caméra
+navigator.mediaDevices.getUserMedia({ video:true, audio:false })
+.then(stream => {
+  cam.srcObject = stream;
+});
+
+// Choix vidéo modèle
+videoFile.onchange = e => {
+  const file = e.target.files[0];
+  if (file) {
+    ref.src = URL.createObjectURL(file);
+    fileLabel.classList.add("has-file");
+    fileLabel.innerHTML = `✓ ${file.name}`;
+    startBtn.disabled = false;
+  }
+};
+
+// Dessin caméra sur canvas pour l'enregistrement
+function drawCam() {
+  if (!canvas.width || !canvas.height) return;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.drawImage(cam, 0, 0, canvas.width, canvas.height);
+  requestAnimationFrame(drawCam);
+}
+
+// Enregistrement
+startBtn.onclick = async () => {
+  canvas.width = cam.videoWidth || 720;
+  canvas.height = cam.videoHeight || 1280;
+
+  drawCam();
+
+  // Audio de la vidéo OG
+  const audioCtx = new AudioContext();
+  const source = audioCtx.createMediaElementSource(ref);
+  const dest = audioCtx.createMediaStreamDestination();
+  source.connect(dest);
+  source.connect(audioCtx.destination);
+
+  const canvasStream = canvas.captureStream(30);
+
+  const finalStream = new MediaStream([
+    ...canvasStream.getVideoTracks(),
+    ...dest.stream.getAudioTracks()
+  ]);
+
+  recorder = new MediaRecorder(finalStream, { mimeType: 'video/webm; codecs=vp8,opus' });
+  chunks = [];
+
+  recorder.ondataavailable = e => chunks.push(e.data);
+
+  recorder.onstop = () => {
+    const blob = new Blob(chunks, { type:"video/webm" });
+    const url = URL.createObjectURL(blob);
+
+    result.innerHTML = `
+      <div class="card">
+        <video src="${url}" controls></video>
+        <a href="${url}" download="trend-video.webm">⬇ Télécharger</a>
+      </div>
+    `;
+  };
+
+  recorder.start();
+  startBtn.disabled = true;
+  stopBtn.disabled = false;
+
+  ref.muted = false;
+  await ref.play();
+};
+
+// Stop
+stopBtn.onclick = () => {
+  recorder.stop();
+  ref.pause();
+  ref.currentTime = 0;
+  stopBtn.disabled = true;
+};
+</script>
+
+</body>
+</html>
